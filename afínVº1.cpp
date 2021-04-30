@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <stdio.h>
 using std::cout;
 using std::endl;
@@ -7,11 +8,13 @@ using std::cin;
 using std::string;
 using std::getline;
 int mcd_euclides(int a,int tamAlfa);
+int inversa(int a,int b);
 class Afin
 {
     private:
         int a;
         int b;
+        int invA;
         string alf{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
         //string alfAlternativo{"ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 1234567890-,.()"};
     public:
@@ -21,7 +24,7 @@ class Afin
         }
         Afin(int a1,int b1)
         {
-            this->a=(alf.size())-a1;
+            this->invA=inversa(a1,b1);
             this->b=b1;
         }
         void generarClaves()
@@ -66,13 +69,14 @@ class Afin
                         break;
                     }
                 }
-                if(((a*((busqueda)-b)))<(1))
+                if(((invA*((busqueda)-b)))<(1))
                 {
-                    mens_cifrado[pasada1]=alf[(alf.size())+(((a*((busqueda)-b))%((int)alf.size())))];
+                    //cout<<"es: "<<abs(((invA*((busqueda)-b))%((int)alf.size())))<<endl;
+                    mens_cifrado[pasada1]=alf[abs(((invA*((busqueda)-b))%((int)alf.size())))];
                 }
                 else
                 {
-                    mens_cifrado[pasada1]=alf[((a*((busqueda)-b))%(alf.size()))];
+                    mens_cifrado[pasada1]=alf[((invA*((busqueda)-b))%((int)alf.size()))];
                 }
             }
         }
@@ -109,4 +113,32 @@ int mcd_euclides(int a,int tamAlfa)
         a = temp;
     }
     return a;
+}
+
+int inversa(int a,int b)
+{
+    int m0 = b;
+    int t;
+    int q;
+    int x0 = 0;
+    int x1 = 1;
+    if (b == 1)
+    {
+        return 0;
+    }
+    while (a > 1)
+    {
+        q = a / b;
+        t = b;
+        b = a % b;
+        a = t;
+        t = x0;
+        x0 = x1 - q * x0;
+        x1 = t;
+    }
+    if (x1 < 0)
+    {
+        x1 += m0;
+    }
+    return x1;
 }
